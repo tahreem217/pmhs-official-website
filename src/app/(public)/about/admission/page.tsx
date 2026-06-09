@@ -127,17 +127,17 @@ const Admission = () => {
                   ["Class XI: Arts", 256, "₹8,000*"],
                 ].map((row, i) => (
                   <tr key={i} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="px-4 py-3 font-semibold text-slate-700">{row[0]}</td>
-                    <td className="px-4 py-3 text-center font-medium">{row[1]}</td>
-                    <td className="px-4 py-3 text-right font-bold text-[#003366]">{row[2]}</td>
+                    <td className="md:px-4 px-2 py-3 font-semibold text-slate-700">{row[0]}</td>
+                    <td className="md:px-4 px-2 py-3 text-center font-medium">{row[1]}</td>
+                    <td className="md:px-4 px-2 py-3 text-right font-bold text-[#003366]">{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
                 <tr className="bg-slate-50 font-bold border-t-2 border-slate-200 text-slate-800">
-                  <td className="px-4 py-3 uppercase text-[#003366]">Total Seats</td>
-                  <td className="px-4 py-3 text-center text-emerald-600">1,050</td>
-                  <td className="px-4 py-3"></td>
+                  <td className="md:px-4 px-2 py-3 uppercase text-[#003366]">Total Seats</td>
+                  <td className="md:px-4 px-2 py-3 text-center text-emerald-600">1,050</td>
+                  <td className="md:px-4 px-2 py-3"></td>
                 </tr>
               </tfoot>
             </table>

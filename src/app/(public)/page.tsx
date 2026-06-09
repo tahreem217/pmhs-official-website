@@ -26,16 +26,16 @@ export default function HomePage() {
       <RoleRedirect/>
  
       <SchoolBanner />
-      <div className=' w-screen flex flex-col md:flex-row gap-12 md:gap-6 px-10 py-10'>
+      <div className=' w-screen flex flex-col md:flex-row gap-12 md:gap-6 md:px-10 px-4 py-10'>
         <ImageCarousel/>
           <MissionVision/>
       </div>
       <PrincipalMessage/>
-      <div className=' w-screen flex flex-col md:flex-row gap-12 md:gap-6 px-10 py-10'>
-        <div className='w-[50%]' >
+      <div className=' w-screen flex flex-col md:flex-row gap-12 md:gap-6 md:px-10  px-4 py-10'>
+        <div className='md:w-[50%] w-full ' >
         <ImportantLinks/>
         </div>
-        <div className='w-[50%]'>
+        <div className='md:w-[50%] w-full'>
         <Annoucement/>
         </div>
       </div>
