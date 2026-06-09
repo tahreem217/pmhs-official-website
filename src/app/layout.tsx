@@ -9,8 +9,9 @@ import Footer from "@/components/landing/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Patna Muslim High School ",
-  description: "Official Website for Patna Muslim High School",
+  title: "PMHS | Public Model High School",
+  description: "Official student and teacher portal for PMHS. Access announcements, exams, and academic records.",
+  keywords: ["PMHS", "Patna Muslim High School", "School ERP", "Student Portal", "Teacher Dashboard"],
 };
 
 export default function rootLayout({
