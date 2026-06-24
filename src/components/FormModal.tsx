@@ -5,7 +5,7 @@ import { fromJSON } from "postcss";
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
  
 import dynamic from "next/dynamic";
-import { deleteClass, deleteExam, deleteLesson, deleteNotice, deleteResult, deleteStudent, deleteSubject, deleteTeacher } from "@/lib/actions";
+import { deleteClass, deleteExam, deleteLesson, deleteMaintainence, deleteNotice, deleteResult, deleteStudent, deleteSubject, deleteTeacher } from "@/lib/actions";
 import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -44,6 +44,9 @@ const ExamForm = dynamic(() => import("./ExamForm"), {
 const LessonForm = dynamic(() => import("./LessonForm"), {
   loading: () => <h1>Loading...</h1>,
 });
+const MaintenanceForm = dynamic(() => import("./MaintenanceForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
 const deleteAction={
   subject:deleteSubject,
    teacher:deleteTeacher,
@@ -52,7 +55,8 @@ const deleteAction={
    result:deleteResult,
    announcements:deleteNotice,
    exam:deleteExam,
-   lesson:deleteLesson
+   lesson:deleteLesson,
+   maintenance:deleteMaintainence
    
 }
  
@@ -66,11 +70,12 @@ const forms:{[key: string]: (setOpen: Dispatch<SetStateAction<boolean>>, type: "
     announcements:(setOpen,type,data,relatedData) =><NoticesForm setOpen={setOpen} type={type} data={data}  relatedData={relatedData}/>,
     exam:(setOpen,type,data,relatedData) =><ExamForm setOpen={setOpen} type={type} data={data}  relatedData={relatedData}/>,
     lesson:(setOpen,type,data,relatedData) =><LessonForm setOpen={setOpen} type={type} data={data}  relatedData={relatedData}/>,
+    maintenance:(setOpen,type,data,relatedData) =><MaintenanceForm setOpen={setOpen} type={type} data={data}   />,
 
 }
 
 const FormModal = ({table,type,data,id,relatedData}:{
-    table:"student"|"teacher" | "subject"| "result" | "exam"  | "classes" | "announcements" |"lesson";
+    table:"student"|"teacher" | "subject"| "result" | "exam"  | "classes" | "announcements" |"lesson" | "maintenance"
     type:"delete" |"edit" | "create";
     data?:any;
     id?:string;

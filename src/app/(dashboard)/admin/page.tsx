@@ -5,7 +5,7 @@ import FinanceChart from "@/components/FinanceChart";
  
 import Performancebox from "@/components/Performancebox";
 import EventCalender from "@/components/EventCalender";
- import Maintainence from "@/components/Maintainence";
+ import Maintainence from "@/components/Maintenance";
 import Annoucement from "@/components/AnnoucementBox";
  
 

@@ -141,3 +141,19 @@ export const lessonSchema = z.object({
  });
 
  export  type LessonSchema=z.infer<typeof lessonSchema>;
+
+ export const maintainenceSchema = z.object({
+   id:z.string().optional(),
+   title:z.string().min(1, { message: 'Repair name  is required' }) ,
+    description:z.string().min(1, { message: 'Description  is required' }) ,
+   status: z.enum(["Pending", "Completed"], {
+     message: 'Please select a status'
+    }),
+    location:z.string().optional()
+    
+     
+   
+ }) 
+    
+
+ export  type MaintainenceSchema=z.infer<typeof maintainenceSchema>;

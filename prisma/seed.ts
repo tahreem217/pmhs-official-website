@@ -6,9 +6,7 @@ async function main() {
   console.log("Wiping database in a single transaction...");
 
   // 1. Delete everything in a specific order (Children FIRST, Parents LAST)
-  // Wrapping this in a $transaction prevents the P2034 deadlock error.
   await prisma.$transaction([
-    // Deepest children first
     prisma.result.deleteMany(),
     prisma.attendance.deleteMany(),
     prisma.exam.deleteMany(),
@@ -16,16 +14,13 @@ async function main() {
     prisma.event.deleteMany(),
     prisma.announcement.deleteMany(),
     
-    // Intermediate tables
     prisma.student.deleteMany(),
     prisma.class.deleteMany(),
 
-    // Parent tables
     prisma.teacher.deleteMany(),
     prisma.subject.deleteMany(),
     prisma.grade.deleteMany(),
 
-    // Independent tables
     prisma.admin.deleteMany(),
     prisma.maintenanceTicket.deleteMany(),
   ]);
@@ -65,9 +60,7 @@ async function main() {
         phone: `123-456-789${i}`,
         address: `Teacher Address ${i}`,
         sex: i % 2 === 0 ? Usersex.MALE : Usersex.FEMALE,
-        subjects: {
-          connect: [{ id: subjects[i % subjects.length].id }],
-        },
+        subjectIds: [subjects[i % subjects.length].id], // Fixed: use subjectIds directly for MongoDB
       },
     });
     teachers.push(teacher);
@@ -101,9 +94,7 @@ async function main() {
         sex: i % 2 === 0 ? Usersex.MALE : Usersex.FEMALE,
         classId: classes[i % classes.length].id,
         gradeId: grades[i % grades.length].id,
-        teachers: {
-          connect: [{ id: teachers[i % teachers.length].id }],
-        },
+        teacherIds: [teachers[i % teachers.length].id], // Fixed: use teacherIds directly for MongoDB
       },
     });
     students.push(student);
@@ -191,20 +182,17 @@ async function main() {
   }
 
   // MAINTENANCE TICKETS
-  // MAINTENANCE TICKETS
   const ticketLocations = ["Lab 3", "Staff Room A", "Block B, Floor 2", "Classroom 8B", "Main Gate"];
-  const ticketStatuses = ["Done","Pending"];
+  const ticketStatuses = ["Completed", "Pending"];
   const ticketItems = ["Projector", "AC Unit", "Water Filter", "Window Latch", "Security Camera"];
-  // Added an array for priority levels
-  
   
   for (let i = 0; i < 5; i++) {
     await prisma.maintenanceTicket.create({
       data: {
         title: `Fix ${ticketItems[i]}`,
-        location: ticketLocations[i%2],
-        status: ticketStatuses[i],
-        // Added the missing priority field here
+        location: ticketLocations[i % ticketLocations.length],
+        description: `Routine service check and repair work logged for the school's ${ticketItems[i].toLowerCase()}.`,
+        status: ticketStatuses[i % 2], 
         createdAt: new Date(new Date().setDate(new Date().getDate() - i)),
       },
     });

@@ -1,8 +1,10 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import { FaBell } from "react-icons/fa6"; 
+import DetailsModal from "./DetailsModal";
+import NoticesForm from "./NoticesForm";
+import FormModal from "./FormModal";
 
-// Define what a single announcement looks like
 interface AnnouncementItem {
   id: string | number;
   title: string;
@@ -10,35 +12,43 @@ interface AnnouncementItem {
   description: string;
 }
 
-// Define the props interface for the component
 interface AnnouncementScrollProps {
   announcements?: AnnouncementItem[]; 
   role: string | undefined;
+  relatedData?: { classes?: { id: string; name: string }[] } | any;
 }
 
-const AnnouncementScroll = ({ announcements = [], role }: AnnouncementScrollProps) => {
+const AnnouncementScroll = ({ announcements = [], role, relatedData }: AnnouncementScrollProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [selected, setSelected] = useState<AnnouncementItem | null>(null);
+
+  // editing holds the announcement data; open controls the boolean setter passed to NoticesForm
+  const [editing, setEditing] = useState<AnnouncementItem | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
+
+  // When `open` becomes false -> ensure editing is cleared
+  useEffect(() => {
+    if (!open) {
+      setEditing(null);
+    }
+  }, [open]);
 
   // Duplicating array for infinite scroll effect
   const displayAnnouncements = [...announcements, ...announcements];
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
-    
     if (!scrollContainer || isHovered || announcements.length <= 3) return;
 
     let animationFrameId: number;
-    
     const smoothScroll = () => {
       const halfHeight = scrollContainer.scrollHeight / 2;
-  
       if (scrollContainer.scrollTop >= halfHeight) {
         scrollContainer.scrollTop = 0;
       } else {
         scrollContainer.scrollTop += 0.5; 
       }
-      
       animationFrameId = requestAnimationFrame(smoothScroll);
     };
 
@@ -55,10 +65,10 @@ const AnnouncementScroll = ({ announcements = [], role }: AnnouncementScrollProp
           <h1 className="text-xl font-bold tracking-wide">Notice Board</h1>
         </div>
         {role === "admin" && (
-          <button className="text-xs font-bold text-[#42426F] bg-amber-400 px-3 py-1.5 rounded-full hover:bg-amber-300 transition-colors shadow-sm">
-            + New Notice
-          </button>
-        )}
+             
+            <FormModal  table="announcements" type="create"  relatedData={relatedData ?? { classes: [] }} />
+
+         )}
       </div>
 
       <div className="relative flex-1 bg-slate-50/30 overflow-hidden">
@@ -72,6 +82,7 @@ const AnnouncementScroll = ({ announcements = [], role }: AnnouncementScrollProp
             <div 
               key={`${anc.id}-${idx}`}
               className="group relative p-2 hover:bg-white transition-colors duration-300 cursor-pointer"
+              onClick={() => setSelected(anc)} // open preview on click
             >
               <div className="p-4 rounded-xl border group-hover:shadow-md group-hover:border-amber-400 border-orange-950/15 bg-white">
                 <div className="flex justify-between items-start gap-4 mb-2">
@@ -88,6 +99,44 @@ const AnnouncementScroll = ({ announcements = [], role }: AnnouncementScrollProp
               </div>
             </div>
           ))}
+
+        
+          {selected && (
+            <DetailsModal
+              open={!!selected}
+              onClose={() => setSelected(null)}
+              title={selected.title}
+              date={selected.date}
+              description={selected.description}
+              onEdit={() => {
+                setSelected(null);        // close preview
+                setEditing(selected);     // set editing data
+                setOpen(true);            // open the boolean-controlled modal (passed to NoticesForm)
+              }}
+            />
+          )}
+
+           {editing && open && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+              onClick={() => setOpen(false)}
+            >
+              <div className="max-w-3xl w-[95%] bg-white rounded-xl p-6 shadow-lg" onClick={(e) => e.stopPropagation()}>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-semibold">Edit Notice</h3>
+                  <button onClick={() => setOpen(false)} className="px-3 py-1 rounded bg-slate-100">Close</button>
+                </div>
+
+                <NoticesForm
+                  // pass the actual React setter (matches Dispatch<SetStateAction<boolean>>)
+                  setOpen={setOpen}
+                  type="edit"
+                  data={editing}
+                  relatedData={relatedData ?? { classes: [] }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

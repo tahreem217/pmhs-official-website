@@ -13,7 +13,26 @@
   }
   
  
-  
+  /* 1. Hide the Google Translate top banner entirely */
+.skiptranslate, 
+.goog-te-banner-frame, 
+#goog-gt-tt, 
+.goog-te-balloon-frame {
+  display: none !important;
+}
+
+/* 2. Prevent Google from pushing your page content down */
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+/* 3. Hide the automatically injected tooltips when hovering over translated text */
+.goog-text-highlight {
+  background: transparent !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
   /* Fix for the "Today / Back / Next" text centering */
   .rbc-toolbar button {
     @apply inline-flex items-center justify-center !important;
@@ -66,13 +85,13 @@
         color:black;
         font-size:10px;
         padding:0px;
-
+        
 
     }
     .rbc-event:nth-child(1){
         background-color: #FFFFF0;
         padding:3px;
-        width:50px;
+         
         color:black;
         
     }

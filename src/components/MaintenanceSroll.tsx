@@ -1,19 +1,21 @@
 "use client"
 import React from 'react'
-
-// 1. Removed priority, added status
+import FormModal from './FormModal';
+ 
  
 
-const FacilitiesTracker = ({ data }: { data:any }) => {
+const FacilitiesTracker = ({ data,role }: { data:any,role:string| undefined }) => {
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col flex-1 w-full h-full">
       
       
       <div className='flex justify-between items-center mb-4'>
         <h1 className='text-lg font-bold text-slate-800'>Facilities & Repairs</h1>
-        <button className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-md hover:bg-blue-100 transition-colors">
-          + New Ticket
-        </button>
+        {role === "admin" && (
+             
+             <FormModal  table="maintenance" type="create"    />
+ 
+          )}
       </div>
 
      

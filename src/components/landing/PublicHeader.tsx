@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaChevronDown } from "react-icons/fa6";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 const PublicHeader = () => {
     const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -46,6 +47,7 @@ const PublicHeader = () => {
                     </h2>
                 </div>
             </div>
+            <LanguageSwitcher />
             <nav className="  text-white w-full hidden md:block">
             <div className="max-w-7xl mx-auto px-4 flex justify-center gap-8">
             {navLinks.map((link)=>{

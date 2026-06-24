@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import type { ClassSchema, ExamSchema, LessonSchema, NoticeSchema, ResultSchema, Studentschema, SubjectSchema,Teacherschema } from "./formValidationSchema"
+import type { ClassSchema, ExamSchema, LessonSchema, MaintainencerSchema, MaintainenceSchema, NoticeSchema, ResultSchema, Studentschema, SubjectSchema,Teacherschema } from "./formValidationSchema"
 import prisma from "./prisma"
 import { clerkClient } from "@clerk/nextjs/server"
 type CurrentState={success:boolean,error:boolean | string}
@@ -833,5 +833,93 @@ export const updateSubject=async ( currentState: CurrentState, data:SubjectSchem
                                                                                     return {success:false,error:true} 
                                                                                    }
                                                                                 }
-                                                                            
-                                                             
+                                                                                export const createMaintainence=async ( currentState: CurrentState, data:MaintainenceSchema)=>
+                                                                                    {
+                                                                                       try{
+                                                                                       
+                                                                        
+                                                                                        
+                                                                                       
+                                                                                        await prisma.maintenanceTicket.create({
+                                                                                            
+                                                                                            data:{
+                                                                                              
+                                                                                                   title:data.title,
+                                                                                                    location:data.location,  
+                                                                                                   description:data.description,
+                                                                                                    status:data.status,
+                                                                                                     
+                                                                                                
+                                                                                            
+                                                                                      
+                                                                                            }
+                                                                                        })
+                                                                                    
+                                                                                        
+                                                                                        return {success:true,error:false}
+                                                                                       }catch(err)
+                                                                                       {
+                                                                                        console.log(err)
+                                                                                        return {success:false,error:true} 
+                                                                                       }
+                                                                                    }
+                                                                                    export const updateMaintainence=async ( currentState: CurrentState, data: MaintainenceSchema)=>
+                                                                                        {
+                                                                                           try{
+                                                                                             
+                                                                                            await prisma.maintenanceTicket.update({
+                                                                                                
+                                                                                                where:{
+                                                                                                   id:data.id
+                                                                                                },
+                                                                                                data:{
+                                                                                              
+                                                                                                    title:data.title,
+                                                                                                     location:data.location,  
+                                                                                                    description:data.description,
+                                                                                                     status:data.status,
+                                                                                                      
+                                                                                                 
+                                                                                             
+                                                                                       
+                                                                                             }
+                                                                                    
+                                                                                            })
+                                                                                           
+                                                                                           
+                                                                                            return {success:true,error:false}
+                                                                                           }catch(err)
+                                                                                           {
+                                                                                            console.log(err)
+                                                                                            return {success:false,error:true} 
+                                                                                           }
+                                                                                        }
+                                                                                    
+                                                                                        export const deleteMaintainence=async ( currentState: CurrentState,formData: FormData)=>
+                                                                                            {
+                                                                                                const rawId = formData.get("id") ;
+                                                                                                if (!rawId || typeof rawId !== "string") {
+                                                                                                    return { success: false, error: "Invalid or missing ID." };
+                                                                                                }
+                                                                                                const id = rawId;
+                                                                                               try{
+                                                                                                await prisma.maintenanceTicket.delete({
+                                                                                                    
+                                                                                                    where:{
+                                                                                                       id:id
+                                                                                                    },
+                                                                                                    
+                                                                                                
+                                                                                        
+                                                                                                })
+                                                                                               
+                                                                                              
+                                                                                                return {success:true,error:false}
+                                                                                               }catch(err)
+                                                                                               {
+                                                                                                console.log(err)
+                                                                                                return {success:false,error:true} 
+                                                                                               }
+                                                                                            }
+                                                                                        
+                                                                         

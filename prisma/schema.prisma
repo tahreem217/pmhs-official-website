@@ -12,16 +12,16 @@ datasource db {
 model MaintenanceTicket {
   
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  
+  description String
 
   title       String
-  location    String
+  location    String?
  
  
   
 
   
-  status      String   @default("Pending") 
+  status     Status  
   
   createdAt   DateTime @default(now())
   
@@ -219,5 +219,8 @@ enum Day {
   FRIDAY
   SATURDAY
 }
-
+enum Status {
+  Pending
+  Completed
+}
 // Whenever you (or a teammate) download the code on a new computer, you just run npx prisma generate, and Prisma will recreate all those files instantly.
