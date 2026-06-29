@@ -5,7 +5,7 @@ import {auth} from  "@clerk/nextjs/server";
 import { SearchParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
 import FilterBar from "@/components/features/FilterBar";
 
-const StudentResultsPage = async ({searchParams}:{search:{[key:string]:string| undefined}})=>{
+const StudentResultsPage = async ({searchParams}:{searchParams:{[key:string]:string| undefined}})=>{
     const { userId } = await auth();
 
      

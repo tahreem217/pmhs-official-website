@@ -84,7 +84,7 @@ const Resultpage = async ({ searchParams }: { searchParams: { [key: string]: str
   // Role specific Dropdown/Modal queries
   if (role === "teacher") {
     const supervisedClass = await prisma.class.findFirst({
-      where: { supervisor: { clerkId: currentId } },
+      where: { supervisor: { clerkId: currentId as string } },
       select: { id: true },
     });
 
@@ -94,13 +94,13 @@ const Resultpage = async ({ searchParams }: { searchParams: { [key: string]: str
     examQuery = {
       OR: [
         { lesson: { classId: teacherClassId || "prevent_all" } },
-        { lesson: { teacher: { clerkId: currentId } } },
+        { lesson: { teacher: { clerkId: currentId as string } } },
       ],
     };
     studentQuery = {
       OR: [
         { classId: teacherClassId || "prevent_all" },
-        { class: { lessons: { some: { teacher: { clerkId: currentId } } } } },
+        { class: { lessons: { some: { teacher: { clerkId: currentId  as string} } } } },
       ],
     };
   }
@@ -155,7 +155,7 @@ const Resultpage = async ({ searchParams }: { searchParams: { [key: string]: str
       OR: [
           
         { student: { classId: teacherClassId || "prevent_all" } },
-         { exam: { lesson: { teacher: { clerkId: currentId } } } },
+         { exam: { lesson: { teacher: { clerkId: currentId as string } } } },
       ],
     });
   }

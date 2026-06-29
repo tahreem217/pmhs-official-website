@@ -24,7 +24,7 @@
           
          formState: { errors ,isSubmitting},
        } = useForm<Studentschema>({
-         resolver: zodResolver(studentSchema)  ,
+        
          defaultValues: {
           ...data,
           // FORCE empty strings for nullable fields

@@ -138,7 +138,7 @@ const studentpage = async ({ searchParams }: { searchParams: { [key: string]: st
       break;
     case "teacher":
       // Now safely adds to the query without overwriting teacherId filters
-      queryConditions.push({ class: { supervisor: { clerkId: currentId } } });
+      queryConditions.push({ class: { supervisor: { clerkId: currentId as string } } });
       break;
     default:
       break;

@@ -6,11 +6,12 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import FilterBar from "@/components/features/FilterBar";
 
-const MyExamsPage = async ({ 
-  searchParams 
-}: { 
-  searchParams: { [key: string]: string | undefined }; 
-}) => {
+// 1. Updated Next.js searchParams interface
+interface PageProps {
+  searchParams: { [key: string]: string | string[] | undefined }; 
+}
+
+const MyExamsPage = async ({ searchParams }: PageProps) => {
   const { userId, sessionClaims } = await auth();
 
   if (!userId) {
@@ -18,7 +19,10 @@ const MyExamsPage = async ({
   }
 
   const role = (sessionClaims?.metadata as { role?: string })?.role;
-  const { academicYear, tab = "subject" } = searchParams;
+  
+  // Safely cast searchParams to strings
+  const academicYear = searchParams.academicYear as string | undefined;
+  const tab = (searchParams.tab as string) || "subject";
   const view = tab as "subject" | "class";
 
   let exams: any[] = [];
@@ -31,13 +35,22 @@ const MyExamsPage = async ({
     const studentWhere = { lesson: { class: { students: { some: { clerkId: userId } } } } };
 
     [availableYears, exams] = await Promise.all([
-      prisma.exam.findMany({ where: studentWhere, distinct: ['academicYear'], select: { academicYear: true }, orderBy: { academicYear: 'desc' } }),
+      // FIX: Applied `not: null` and the type cast to the FIRST query (availableYears)
+      prisma.exam.findMany({ 
+        where: { ...studentWhere, academicYear: { not: null } }, 
+        distinct: ['academicYear'], 
+        select: { academicYear: true }, 
+        orderBy: { academicYear: 'desc' } 
+      }) as unknown as Promise<{ academicYear: string }[]>,
+      
+      // FIX: Restored the proper academicYear filter for the actual exams table
       prisma.exam.findMany({
         where: { ...studentWhere, ...(academicYear ? { academicYear } : {}) },
         include: { lesson: { include: { subject: true, teacher: true } } },
         orderBy: { startTime: "asc" },
       })
     ]);
+
   } else if (role === "teacher") {
     const teacher = await prisma.teacher.findUnique({ where: { clerkId: userId } });
     if (!teacher) return <div className="p-8 text-center">Profile not found.</div>;
@@ -50,7 +63,17 @@ const MyExamsPage = async ({
       : { lesson: { class: { supervisorId: teacher.id } } };
 
     [availableYears, exams] = await Promise.all([
-      prisma.exam.findMany({ where: view === "subject" ? { lesson: { teacherId: teacher.id } } : { lesson: { class: { supervisorId: teacher.id } } }, distinct: ['academicYear'], select: { academicYear: true }, orderBy: { academicYear: 'desc' } }),
+      // FIX: Applied the exact same `not: null` and type cast for the Teacher's query
+      prisma.exam.findMany({ 
+        where: { 
+          ...(view === "subject" ? { lesson: { teacherId: teacher.id } } : { lesson: { class: { supervisorId: teacher.id } } }),
+          academicYear: { not: null }
+        }, 
+        distinct: ['academicYear'], 
+        select: { academicYear: true }, 
+        orderBy: { academicYear: 'desc' } 
+      }) as unknown as Promise<{ academicYear: string }[]>,
+      
       prisma.exam.findMany({
         where: { ...teacherWhere, ...(academicYear ? { academicYear } : {}) },
         include: { lesson: { include: { subject: true, class: true } } },

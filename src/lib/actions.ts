@@ -541,7 +541,7 @@ subjects: data.subjects
                         
                                         if (role === "teacher") {
                                             const teacher = await prisma.teacher.findFirst({
-                                              where: { clerkId: userId },
+                                              where: { clerkId: userId as string},
                                             });
                                       
                                             if (!teacher) return { success: false, error: true };
@@ -627,7 +627,7 @@ subjects: data.subjects
                             
                                             if (role === "teacher") {
                                                 const teacher = await prisma.teacher.findUnique({
-                                                  where: { clerkId: userId },
+                                                  where: { clerkId: userId as string },
                                                 });
                                           
                                                 if (!teacher) return { success: false, error: true };
