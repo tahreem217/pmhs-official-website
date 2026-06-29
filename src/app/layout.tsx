@@ -3,11 +3,42 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://patnamuslimhighschool.com'),
-  title: 'Patna Muslim High School | Official ERP Portal',
-  description: 'Official portal for Patna Muslim High School for student and teacher management.',
+metadataBase: new URL('https://www.patnamuslimhighschool.com'),
+  title: 'Patna Muslim High School ',
+  description:
+  'Official website of Patna Muslim High School. Explore admissions, academics, facilities, school rules, announcements, and student and teacher portals.',
   alternates: {
     canonical: '/',
+  },
+  keywords: [
+    "Patna Muslim High School",
+    "PMHS",
+    "Patna Muslim High School official website",
+    "School in Patna",
+    "Best school in Patna",
+    "School admissions Patna",
+    "Bihar school",
+    "Education in Patna",
+    "Patna CBSE school",  
+    "Patna secondary school",
+  ],
+  openGraph: {
+    title: {
+        default: "Patna Muslim High School | Official Website",
+        template: "%s | Patna Muslim High School",
+      },
+    description:
+      "Official website of Patna Muslim High School. Admissions, academics, facilities, and school updates.",
+    url: "https://www.patnamuslimhighschool.com",
+    siteName: "Patna Muslim High School",
+    type: "website",
+    images: [
+        {
+          url: "/logo.png",
+          width: 1200,
+          height: 630,
+          alt: "Patna Muslim High School",
+        },]
   },
 };
 
