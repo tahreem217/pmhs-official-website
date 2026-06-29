@@ -1,11 +1,9 @@
-import Usercard from "@/components/Usercard";
-import Capacitybox from "@/components/Capacitybox";
+import Usercard from "@/components//dashboard/Usercard";
+import Capacitybox from "@/components/dashboard/Capacitybox";
  
-import FinanceChart from "@/components/FinanceChart";
- 
-import Performancebox from "@/components/Performancebox";
-import EventCalender from "@/components/EventCalender";
- import Maintainence from "@/components/Maintenance";
+   
+import Performancebox from "@/components/dashboard/Performancebox";
+  import Maintainence from "@/components/dashboard/Maintenance";
 import Annoucement from "@/components/notices/AnnoucementBox";
  
 const adminpage = () => {
@@ -32,7 +30,7 @@ const adminpage = () => {
 
         </div>
 
-        <div className="h-[310px] bg-white rounded-2xl p-4 shadow-sm">
+        <div className="min-h-[310px] bg-white rounded-2xl p-4 shadow-sm">
           <Performancebox />
         </div>
 

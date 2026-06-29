@@ -17,7 +17,7 @@ import type { announcementsData } from "@/lib/data";
  
  
 
-const TeacherForm=dynamic(()=>import("@/components/TeacherForm"),{
+const TeacherForm=dynamic(()=>import("@/components/forms/TeacherForm"),{
 
       loading:()=><h1>Loading...</h1>
 });

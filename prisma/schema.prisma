@@ -29,13 +29,13 @@ model MaintenanceTicket {
 }
 model Admin { 
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
-   clerkId String?
+   clerkId String @unique
   username String  @unique
 } 
 
 model Student { 
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId    String?
+  clerkId    String @unique
   email     String?  @unique
   username  String   @unique
   name      String
@@ -44,7 +44,10 @@ model Student {
   img       String?
   address   String
   sex       Usersex
-  
+  motherName String?
+  fatherName String?
+  dob       DateTime?
+  bloodGroup  String?
   createdAt DateTime @default(now())
 
   classId   String   @db.ObjectId
@@ -57,14 +60,14 @@ model Student {
   teacherIds String[]  @db.ObjectId
   teachers   Teacher[] @relation(fields: [teacherIds], references: [id])
 
-  attendance Attendance[]
+ 
   results    Result[]
 } 
 
 model Teacher { 
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   email     String?  @unique
-   clerkId String?
+   clerkId String @unique
   username  String   @unique
   name      String
   surname   String
@@ -72,7 +75,10 @@ model Teacher {
   img       String?
   address   String
   sex       Usersex
- 
+  motherName String?
+  fatherName String?
+  dob       DateTime?
+  bloodGroup  String?
   createdAt DateTime @default(now())
 
   // Fixed Many-to-Many for MongoDB
@@ -96,7 +102,7 @@ model Subject {
   teachers   Teacher[] @relation(fields: [teacherIds], references: [id])
   
   lessons    Lesson[] 
-  results    Result[]  // Added missing opposite relation
+  
 }
 
 model Class {
@@ -127,7 +133,9 @@ model Grade {
 model Exam {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  day       Day
+ 
+  academicYear String?
+   
   startTime DateTime
   endTime   DateTime
 
@@ -155,7 +163,7 @@ model Lesson {
  
 
   exams      Exam[]
-  attendance Attendance[]
+  
 }
 
 model Result {
@@ -165,25 +173,13 @@ model Result {
   examId    String   @db.ObjectId
   exam      Exam     @relation(fields: [examId], references: [id]) // Fixed casing
 
-  subjectId String   @db.ObjectId
-  subject   Subject  @relation(fields: [subjectId], references: [id])
+ 
 
   studentId String   @db.ObjectId
   student   Student  @relation(fields: [studentId], references: [id]) // Fixed casing
 }
 
-model Attendance {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  date      DateTime 
-  present   Boolean
-
-  studentId String   @db.ObjectId
-  student   Student  @relation(fields: [studentId], references: [id])
-
-  lessonId  String   @db.ObjectId // Fixed typo 'lessontId'
-  lesson    Lesson   @relation(fields: [lessonId], references: [id])
-}
-
+ 
 model Event {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String

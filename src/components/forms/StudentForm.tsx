@@ -3,7 +3,7 @@
  import { zodResolver } from '@hookform/resolvers/zod';
  import { string, z } from 'zod'; // or 'zod/v4'
  import {  toast } from 'react-toastify';
- import InputField from '../InputField';
+ import InputField from '../ui/InputField';
  import Image from "next/image"
  
  import { FieldError } from 'react-hook-form';
@@ -25,7 +25,19 @@
          formState: { errors ,isSubmitting},
        } = useForm<Studentschema>({
          resolver: zodResolver(studentSchema)  ,
-         defaultValues: data,
+         defaultValues: {
+          ...data,
+          // FORCE empty strings for nullable fields
+          motherName: data?.motherName || "",
+          fatherName: data?.fatherName || "",
+          bloodGroup: data?.bloodGroup || "",
+          // Ensure strings are strings, not null
+          name: data?.name || "",
+          surname: data?.surname || "",
+          phone: data?.phone || "",
+          username: data?.username || "",
+          address: data?.address || "",
+      },
        });
          const {grades,classes}=relatedData
        const [img,setImg]=useState<string | undefined>(data?.img);
@@ -35,10 +47,12 @@
          const onSubmit = handleSubmit(
           (data) => {
             console.log("✅ FRONTEND PASSED! Sending this to server:", data);
-            formAction({...data,img:img});
+            formAction({ ...data, img: img });
           },
           (errors) => {
             console.log("❌ FRONTEND BLOCKED! Zod hates this field:", errors);
+            console.log("Mother Name Error:", errors.motherName?.message);
+            console.log("Father Name Error:", errors.fatherName?.message);
           }
         );
        useEffect(()=>{
@@ -55,13 +69,48 @@
        {data && <input type="hidden" {...register("id")} defaultValue={data.id} />}
        <div className=' w-full flex flex-wrap gap-6  '> 
  
-      <InputField label="First Name" name="name" defaultValue={data?.name}  register={register} error={errors.name}  />
-      <InputField label="Surname Name" name="surname" defaultValue={data?.surname}  register={register} error={errors.surname}  />
-      <InputField label="Phone" type="phone" name="phone" defaultValue={data?.phone}  register={register} error={errors.phone}  />
-      <InputField label="Username" type="username" name="username" defaultValue={data?.username}  register={register} error={errors.username}  />
-      <InputField label="Password" type="password" name="password" defaultValue={data?.password}  register={register} error={errors.password}  />
-      <InputField label="Email" type="email" name="email" defaultValue={data?.email}  register={register} error={errors.email}  />
-      <InputField label="Address"  name="address" defaultValue={data?.address}  register={register} error={errors.address}  />
+       <InputField label="First Name" name="name" defaultValue={data?.name || ""} register={register} error={errors.name} />
+        <InputField label="Surname Name" name="surname" defaultValue={data?.surname || ""} register={register} error={errors.surname} />
+        <InputField label="Phone" type="text" name="phone" defaultValue={data?.phone || ""} register={register} error={errors.phone} />
+        <InputField label="Username" type="text" name="username" defaultValue={data?.username || ""} register={register} error={errors.username} />
+        <InputField label="Password" type="password" name="password" defaultValue={data?.password || ""} register={register} error={errors.password} />
+        <InputField label="Email" type="email" name="email" defaultValue={data?.email || ""} register={register} error={errors.email} />
+        <InputField label="Address" name="address" defaultValue={data?.address || ""} register={register} error={errors.address} />
+        <InputField label="Mother Name" name="motherName" defaultValue={data?.motherName || ""} register={register} error={errors.motherName} />
+        <InputField label="Father Name" name="fatherName" defaultValue={data?.fatherName || ""} register={register} error={errors.fatherName} />
+      <div className="flex flex-col gap-2 w-full md:w-1/4">
+  <label className="text-xs text-gray-500">Date of Birth</label>
+  <input
+    type="date"
+    {...register("dob")}
+    defaultValue={data?.dob ? new Date(data.dob).toISOString().split('T')[0] : ""}
+    className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+  />
+  {errors.dob?.message && (
+    <p className="text-xs text-red-400">{errors.dob.message.toString()}</p>
+  )}
+</div>
+<div className="flex flex-col gap-2 w-full md:w-1/4">
+  <label className="text-xs text-gray-500">Blood Group</label>
+  <select
+    {...register("bloodGroup")}
+    defaultValue={data?.bloodGroup || ""}
+    className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+  >
+    <option value="">Select Blood Group</option>
+    <option value="A+">A+</option>
+    <option value="A-">A-</option>
+    <option value="B+">B+</option>
+    <option value="B-">B-</option>
+    <option value="AB+">AB+</option>
+    <option value="AB-">AB-</option>
+    <option value="O+">O+</option>
+    <option value="O-">O-</option>
+  </select>
+  {errors.bloodGroup?.message && (
+    <p className="text-xs text-red-400">{errors.bloodGroup.message.toString()}</p>
+  )}
+</div>
  
       <div className='flex flex-col gap-1 flex-1'>
   <label className='text-sm text-gray-400'>Class</label>

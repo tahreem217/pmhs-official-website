@@ -2,9 +2,9 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import Calender from "@/components/BigCalenderContainer";
+import Calender from "@/components/dashboard/BigCalenderContainer";
 import Annoncement from "@/components/notices/AnnoucementBox";
-import PieChart from "@/components/ClassPieChart";
+ 
 import FormModal from '@/components/FormModal';
 import { auth } from "@clerk/nextjs/server";
 const page =async() => {
@@ -80,7 +80,7 @@ const page =async() => {
       </div>
       <div>
 
-        <div><PieChart/></div>
+        
       </div>
       <div className='p-4 bg-white rounded-xl' > <Annoncement/></div>
       </div>

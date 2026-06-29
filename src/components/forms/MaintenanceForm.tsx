@@ -7,7 +7,7 @@ import { useEffect, type Dispatch, type SetStateAction } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
-import InputField from '../InputField';
+import InputField from '../ui/InputField';
 import { MaintainenceSchema, maintainenceSchema } from '@/lib/formValidationSchema';
 import { createMaintainence, updateMaintainence } from '@/lib/actions';
 

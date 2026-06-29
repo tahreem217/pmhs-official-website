@@ -3,10 +3,11 @@ import Image from 'next/image'
 import * as Clerk from '@clerk/elements/common'
 import * as SignIn from '@clerk/elements/sign-in'
 import { useUser } from '@clerk/nextjs'
- 
+import { useState } from 'react'
+import { FiEye, FiEyeOff } from "react-icons/fi"
 const Loginpage = () => {
     const { isLoaded, user } = useUser()
-
+    const [showPassword, setShowPassword] = useState(false)
     if (!isLoaded) {
         return (
           <div className="h-screen flex items-center justify-center bg-slate-50">
@@ -63,24 +64,37 @@ const Loginpage = () => {
                   />
                   <Clerk.FieldError className='text-xs font-semibold text-red-500 pl-1 mt-0.5' />
                </Clerk.Field>
-
-                <Clerk.Field className='flex flex-col w-full gap-1.5' name="password">
+               <Clerk.Field className='flex flex-col w-full gap-1.5' name="password">
                   <div className="flex justify-between items-center px-1">
                      <Clerk.Label className='text-xs font-bold text-slate-600 uppercase tracking-wider'>Password</Clerk.Label>
-                     {/* Placeholder for link behavior if you decide to extend it later */}
-                     {/* <span className="text-xs font-semibold text-[#003366] hover:underline cursor-pointer">Forgot?</span> */}
                   </div>
-                  <Clerk.Input 
-                     className='w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 text-sm placeholder-slate-400 transition-all duration-200 outline-none focus:bg-white focus:border-[#003366] focus:ring-4 focus:ring-blue-50' 
-                     type="password" 
-                     required 
-                     placeholder="••••••••"
-                  />
+               <div className="relative w-full flex items-center">
+                    <Clerk.Input 
+                       // Added pr-16 (padding right) so text doesn't type under the button
+                       className='w-full px-4 py-3 pr-16 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 text-sm placeholder-slate-400 transition-all duration-200 outline-none focus:bg-white focus:border-[#003366] focus:ring-4 focus:ring-blue-50' 
+                       // 4. Dynamically change the input type based on state
+                       type={showPassword ? "text" : "password"} 
+                       required 
+                       placeholder="••••••••"
+                    />
+                    
+                    {/* 5. The absolute positioned toggle button */}
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 text-xs font-bold text-slate-500 hover:text-[#003366] uppercase tracking-wider transition-colors"
+                    >
+            {showPassword ? (
+                        <FiEyeOff size={20} />
+                      ) : (
+                        <FiEye size={20} />
+                      )}
+                    </button>
+                  </div>
                   <Clerk.FieldError className='text-xs font-semibold text-red-500 pl-1 mt-0.5' />
                </Clerk.Field>
 
             </div>
-
              <SignIn.Action 
                submit 
                className='w-full bg-[#003366] hover:bg-blue-900 text-white font-bold text-sm rounded-xl py-3.5 mt-8 transition-all duration-300 shadow-md hover:shadow-xl active:scale-[0.99] tracking-wide uppercase cursor-pointer'

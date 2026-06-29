@@ -1,6 +1,6 @@
 import React from 'react';
 import prisma from '@/lib/prisma';
-import MaintainenceSroll from './dashboard/MaintenanceSroll';
+import MaintainenceSroll from './MaintenanceSroll';
 import { auth } from '@clerk/nextjs/server';
 
 const Maintainence = async () => {

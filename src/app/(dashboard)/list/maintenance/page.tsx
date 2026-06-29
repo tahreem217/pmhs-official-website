@@ -1,6 +1,6 @@
-import Pagination from "@/components/Pagation";
-import Table from "@/components/Table";
-import TableSearch from "@/components/Searchbar";
+import Pagination from "@/components/features/Pagination";
+import Table from "@/components/ui/Table";
+import TableSearch from "@/components/features/Searchbar";
 
 import Image from "next/image";
 import FormModal from "@/components/FormModal";
@@ -127,12 +127,7 @@ const MaintenanceListPage = async ({
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors">
-              <Image src="/filter.png" alt="Filter logs" width={16} height={16} />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors">
-              <Image src="/sort.png" alt="Sort order" width={16} height={16} />
-            </button>
+             
             
             {role === "admin" && (
               <FormModal table="maintenance" type="create" />

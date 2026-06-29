@@ -1,6 +1,6 @@
-import Pagination from "@/components/Pagation";
-import Table from "@/components/Table";
-import TableSearch from "@/components/Searchbar";
+import Pagination from "@/components/features/Pagination";
+import Table from "@/components/ui/Table";
+import TableSearch from "@/components/features/Searchbar";
 import Image from "next/image";
 import Link from "next/link";
 import FormModal from "@/components/FormModal";
@@ -9,9 +9,12 @@ import prisma from "@/lib/prisma";
 import { items_per_page } from "@/lib/setting";
 import { auth } from "@clerk/nextjs/server";
 import { role } from "@/lib/data";
+import FilterBar from "@/components/features/FilterBar";
  
 
  type ExamList = {
+  title:string,
+  academicYear:string,
   id: string;
   startTime: Date;
   endTime: Date;
@@ -23,6 +26,11 @@ import { role } from "@/lib/data";
 };
 
  const getColumns = (role: string | undefined) => [
+  {
+    header: "Title",
+    accessor: "title",
+    className: " ",
+  },
   {
     header: "Subject",
     accessor: "subject",
@@ -56,7 +64,13 @@ import { role } from "@/lib/data";
 ];
 
  const renderRow = (item: ExamList, role: string | undefined,alllesson:any) => (
-  <tr className="border-t-2 rounded-xl odd:border-t-pink-400 even:border-t-yellow-400">
+  <tr key={item.id} className="border-t-2 rounded-xl odd:border-t-pink-400 even:border-t-yellow-400">
+     <td className="p-4">
+      <div className="flex flex-col gap-1">
+        <h3 className="font-semibold">{item.title || "N/A"}</h3>
+        <span className="text-xs text-gray-500">{item.academicYear || "N/A"}</span>
+      </div>
+    </td>
     <td className="flex my-4 gap-3 justify-start px-2 items-center" >
       <h3 className="font-semibold">{item.lesson?.subject?.name || "N/A"}</h3>
     </td>
@@ -104,21 +118,36 @@ import { role } from "@/lib/data";
   const p = page ? parseInt(page) : 1;
 
   const query: Prisma.ExamWhereInput = {};
-  const lessonQuery: Prisma.LessonWhereInput = {};
-  query.lesson={};
+ 
+ 
+  const queryConditions: Prisma.ExamWhereInput[] = [];
+
   if (queryParam) {
     for (const [key, value] of Object.entries(queryParam)) {
-      if (value != undefined) {
+      if (value !== undefined) {
         switch (key) {
           case "search":
-          
-            lessonQuery.subject = { name: { contains: value, mode: "insensitive" } };
+            queryConditions.push({
+              OR: [
+                { title: { contains: value, mode: "insensitive" } },
+                { lesson: { subject: { name: { contains: value, mode: "insensitive" } } } },
+              ],
+            });
             break;
-            case "classId":
-              lessonQuery.classId = value;
+          case "classId":
+            queryConditions.push({ lesson: { classId: value } });
             break;
-            case "teacherId":
-              lessonQuery.teacherId = value;
+          case "teacherId":
+            queryConditions.push({ lesson: { teacherId: value } });
+            break;
+          case "academicYear":
+            queryConditions.push({ academicYear: value });
+            break;
+          case "subjectId":
+            queryConditions.push({ lesson: { subjectId: value } });
+            break;
+          case "examId":
+            queryConditions.push({ id: value });
             break;
           default:
             break;
@@ -126,31 +155,13 @@ import { role } from "@/lib/data";
       }
     }
   }
-  switch(role)
-  {
-    case "admin":
-      break;
-      case "teacher":
-        lessonQuery.teacher = { clerkId: currentId! };
-        break;
-         
-          case "student":
-            lessonQuery.class = {
-              students: {
-                some: { clerkId: currentId! }
-              }
-            }
-  
-            break;
-            default:
-              break;
-              
-  
+ 
+  if (queryConditions.length > 0) {
+    query.AND = queryConditions;
   }
-  if (Object.keys(lessonQuery).length > 0) {
-    query.lesson = lessonQuery;
-  }
-   const [data, count,alllesson] = await prisma.$transaction([
+   
+  
+   const [data, count,allesson,allYears,allClasses,allSubjects,allExams] = await prisma.$transaction([
     prisma.exam.findMany({
       where: query,
       include: {
@@ -170,6 +181,10 @@ import { role } from "@/lib/data";
       subject: true,
       class: true  
     }}),
+    prisma.exam.findMany({ select: { academicYear: true }, distinct: ["academicYear"] }),
+    prisma.class.findMany({ select: { id: true, name: true } }),
+    prisma.subject.findMany({ select: { id: true, name: true } }),
+    prisma.exam.findMany({ select: { id: true, title: true } })
   ]);
  
    const columns = getColumns(role);
@@ -180,22 +195,18 @@ import { role } from "@/lib/data";
         <h1 className="hidden md:block text-lg font-semibold">All exams</h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
+          <FilterBar years={allYears} exams={allExams} classes={allClasses} subjects={allSubjects} />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-300">
-              <Image src="/filter.png" alt="" width={16} height={16} />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-300">
-              <Image src="/sort.png" alt="" width={16} height={16} />
-            </button>
+           
             {role === "admin" && (
-              <FormModal table="exam" type="create" relatedData={{lessons:alllesson}} />
+              <FormModal table="exam" type="create" relatedData={{lessons:allesson}} />
             )}
           </div>
         </div>
       </div>
 
        <div>
-        <Table column={columns} renderRow={(item) => renderRow(item as unknown as ExamList, role,alllesson)} data={data} />
+        <Table column={columns} renderRow={(item) => renderRow(item as unknown as ExamList, role,allesson)} data={data} />
       </div>
 
        <div>

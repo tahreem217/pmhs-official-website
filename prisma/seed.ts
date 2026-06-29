@@ -3,210 +3,178 @@ import { PrismaClient, Usersex, Day } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Wiping database in a single transaction...");
+  console.log("🧹 Wiping data (keeping Admin safe)...")
 
-  // 1. Delete everything in a specific order (Children FIRST, Parents LAST)
-  await prisma.$transaction([
-    prisma.result.deleteMany(),
-    prisma.attendance.deleteMany(),
-    prisma.exam.deleteMany(),
-    prisma.lesson.deleteMany(),
-    prisma.event.deleteMany(),
-    prisma.announcement.deleteMany(),
-    
-    prisma.student.deleteMany(),
-    prisma.class.deleteMany(),
+  // Delete in order from child to parent relations
+  await prisma.result.deleteMany()
+  await prisma.announcement.deleteMany()
+  await prisma.maintenanceTicket.deleteMany()
 
-    prisma.teacher.deleteMany(),
-    prisma.subject.deleteMany(),
-    prisma.grade.deleteMany(),
+  await prisma.exam.deleteMany()
+  await prisma.lesson.deleteMany()
 
-    prisma.admin.deleteMany(),
-    prisma.maintenanceTicket.deleteMany(),
-  ]);
-
-  console.log("Starting to seed the database...");
+  await prisma.student.deleteMany()
+  await prisma.class.deleteMany()
+  await prisma.teacher.deleteMany()
+  await prisma.subject.deleteMany()
+  await prisma.grade.deleteMany()
   
-  // ADMIN
-  await prisma.admin.create({ data: { username: "admin1" } });
-  await prisma.admin.create({ data: { username: "admin2" } });
+  // We explicitly DO NOT delete Admin here so you don't lose your Clerk access!
+  // await prisma.admin.deleteMany() 
+  
+  console.log("✅ Data successfully wiped.");
+  // We DO NOT delete Admin!
 
-  // GRADES
-  const grades = [];
+  console.log("🌱 Seeding database...");
+
+  // 1. CREATE 10 GRADES
+  console.log("Creating Grades...");
   for (let i = 1; i <= 10; i++) {
-    const grade = await prisma.grade.create({
-      data: { level: String(i) },
-    });
-    grades.push(grade);
+    await prisma.grade.create({ data: { level: `Grade ${i}` } });
   }
+  const grades = await prisma.grade.findMany();
 
-  // SUBJECTS
-  const subjects = [];
-  const subjectNames = ["Mathematics", "Science", "English", "History", "Geography", "Physics"];
+  // 2. CREATE 5 SUBJECTS
+  console.log("Creating Subjects...");
+  const subjectNames = ["Mathematics", "Science", "English", "History", "Art"];
   for (const name of subjectNames) {
-    const subject = await prisma.subject.create({ data: { name } });
-    subjects.push(subject);
+    await prisma.subject.create({ data: { name } });
   }
+  const subjects = await prisma.subject.findMany();
 
-  // TEACHERS
-  const teachers = [];
-  for (let i = 1; i <= 19; i++) {
-    const teacher = await prisma.teacher.create({
+  // 3. CREATE 10 TEACHERS
+  console.log("Creating Teachers...");
+  for (let i = 1; i <= 10; i++) {
+    await prisma.teacher.create({
       data: {
+        clerkId: `clerk_teacher_${i}`, // Dummy Clerk ID
         username: `teacher${i}`,
-        name: `TName${i}`,
-        surname: `TSurname${i}`,
-        email: `teacher${i}@example.com`,
-        phone: `123-456-789${i}`,
-        address: `Teacher Address ${i}`,
+        name: `TeacherName${i}`,
+        surname: `TeacherSurname${i}`,
+        email: `teacher${i}@school.com`,
+        phone: `12345678${String(i).padStart(2, "0")}`, // Ensures unique 10-digit phone
+        address: `${i} Main St, City`,
         sex: i % 2 === 0 ? Usersex.MALE : Usersex.FEMALE,
-        subjectIds: [subjects[i % subjects.length].id], // Fixed: use subjectIds directly for MongoDB
+        bloodGroup: "O+",
+        dob: new Date("1985-05-15"),
+        subjects: {
+          connect: [{ id: subjects[i % 5].id }]
+        },// Assign 1 subject per teacher
       },
     });
-    teachers.push(teacher);
   }
+  const teachers = await prisma.teacher.findMany();
 
-  // CLASSES
-  const classes = [];
-  for (let i = 1; i <= 10; i++) {
-    const newClass = await prisma.class.create({
+  // 4. CREATE 10 CLASSES (1 per Grade)
+  console.log("Creating Classes...");
+  for (let i = 0; i < 10; i++) {
+    await prisma.class.create({
       data: {
-        name: `${i}A`,
-        capacity: Math.floor(Math.random() * (30 - 20 + 1)) + 20,
-        supervisorId: teachers[i - 1].id, 
-        gradeId: grades[i - 1].id,
+        name: `${grades[i].level} - A`,
+        capacity: 30,
+        gradeId: grades[i].id,
+        supervisorId: teachers[i].id, // Assign 1 teacher as supervisor
       },
     });
-    classes.push(newClass);
   }
+  const classes = await prisma.class.findMany();
 
-  // STUDENTS
-  const students = [];
-  for (let i = 1; i <= 200; i++) {
-    const student = await prisma.student.create({
+  // 5. CREATE 20 STUDENTS (2 per Class)
+  console.log("Creating Students...");
+  for (let i = 1; i <= 20; i++) {
+    const assignedClass = classes[i % 10];
+    await prisma.student.create({
       data: {
+        clerkId: `clerk_student_${i}`, // Dummy Clerk ID
         username: `student${i}`,
-        name: `SName${i}`,
-        surname: `SSurname${i}`,
-        email: `student${i}@example.com`,
-        phone: `987-654-321${i}`,
-        address: `Student Address ${i}`,
+        name: `StudentName${i}`,
+        surname: `StudentSurname${i}`,
+        email: `student${i}@school.com`,
+        phone: `98765432${String(i).padStart(2, "0")}`,
+        address: `${i} School Lane, City`,
         sex: i % 2 === 0 ? Usersex.MALE : Usersex.FEMALE,
-        classId: classes[i % classes.length].id,
-        gradeId: grades[i % grades.length].id,
-        teacherIds: [teachers[i % teachers.length].id], // Fixed: use teacherIds directly for MongoDB
+        bloodGroup: "A+",
+        dob: new Date("2010-08-20"),
+        motherName: `Mother${i}`,
+        fatherName: `Father${i}`,
+        classId: assignedClass.id,
+        gradeId: assignedClass.gradeId,
+        teachers: {
+          connect: [{ id: teachers[i % 10].id }]
+        }, // Connect to a teacher
       },
     });
-    students.push(student);
   }
+  const students = await prisma.student.findMany();
 
-  // LESSONS
-  const lessons = [];
-  for (let i = 1; i <= 30; i++) {
-    const lesson = await prisma.lesson.create({
+  // 6. CREATE 20 LESSONS
+  console.log("Creating Lessons...");
+  const days = [Day.MONDAY, Day.TUESDAY, Day.WEDNESDAY, Day.THURSDAY, Day.FRIDAY];
+  for (let i = 1; i <= 20; i++) {
+    const cls = classes[i % 10];
+    const teacher = teachers[i % 10];
+    const subject = subjects[i % 5];
+    
+    // Create random start/end times between 8 AM and 2 PM
+    const startTime = new Date();
+    startTime.setHours(8 + (i % 6), 0, 0, 0); 
+    const endTime = new Date(startTime);
+    endTime.setHours(startTime.getHours() + 1);
+
+    await prisma.lesson.create({
       data: {
-        name: `Lesson${i}`,
-        day: Day[Object.keys(Day)[Math.floor(Math.random() * Object.keys(Day).length)] as keyof typeof Day],
-        startTime: new Date(new Date().setHours(new Date().getHours() + 1)),
-        endTime: new Date(new Date().setHours(new Date().getHours() + 3)),
-        subjectId: subjects[i % subjects.length].id,
-        classId: classes[i % classes.length].id,
-        teacherId: teachers[i % teachers.length].id,
+        name: `${subject.name} 10${i}`,
+        day: days[i % 5],
+        startTime: startTime,
+        endTime: endTime,
+        classId: cls.id,
+        teacherId: teacher.id,
+        subjectId: subject.id,
       },
     });
-    lessons.push(lesson);
   }
+  const lessons = await prisma.lesson.findMany();
 
-  // EXAMS
-  const exams = [];
-  for (let i = 1; i <= 10; i++) {
+  // 7. CREATE 10 EXAMS & 20 RESULTS
+  console.log("Creating Exams & Results...");
+  for (let i = 0; i < 10; i++) {
+    const lesson = lessons[i];
+    
+    const startTime = new Date();
+    startTime.setHours(9, 0, 0, 0);
+    const endTime = new Date(startTime);
+    endTime.setHours(11, 0, 0, 0);
+
     const exam = await prisma.exam.create({
       data: {
-        title: `Exam ${i}`,
-        day: Day.FRIDAY,
-        startTime: new Date(new Date().setHours(new Date().getHours() + 1)),
-        endTime: new Date(new Date().setHours(new Date().getHours() + 2)),
-        lessonId: lessons[i % lessons.length].id,
+        title: `Mid-Term ${lesson.name}`,
+        academicYear: "2023-2024",
+        startTime: startTime,
+        endTime: endTime,
+        lessonId: lesson.id,
       },
     });
-    exams.push(exam);
+
+    // Create 2 results per exam (for random students)
+    for (let j = 0; j < 2; j++) {
+      await prisma.result.create({
+        data: {
+          score: Math.floor(Math.random() * 40) + 60, // Random score between 60 and 100
+          examId: exam.id,
+          studentId: students[(i + j) % 20].id,
+        },
+      });
+    }
   }
 
-  // RESULTS
-  for (let i = 1; i <= 50; i++) {
-    await prisma.result.create({
-      data: {
-        score: Math.floor(Math.random() * (90 - 80 + 1)) + 80,
-        examId: exams[i % exams.length].id,
-        subjectId: subjects[i % subjects.length].id, 
-        studentId: students[i % students.length].id,
-      },
-    });
-  }
-
-  // ATTENDANCE
-  for (let i = 1; i <= 50; i++) {
-    await prisma.attendance.create({
-      data: {
-        date: new Date(),
-        present: i % 10 !== 0,
-        studentId: students[i % students.length].id,
-        lessonId: lessons[i % lessons.length].id,
-      },
-    });
-  }
-
-  // EVENTS
-  for (let i = 1; i <= 5; i++) {
-    await prisma.event.create({
-      data: {
-        title: `Event ${i}`,
-        description: `Description for Event ${i}`,
-        startTime: new Date(new Date().setHours(new Date().getHours() + 1)),
-        endTime: new Date(new Date().setHours(new Date().getHours() + 4)),
-        classId: classes[i % classes.length].id,
-      },
-    });
-  }
-
-  // ANNOUNCEMENTS
-  for (let i = 1; i <= 5; i++) {
-    await prisma.announcement.create({
-      data: {
-        title: `Announcement ${i}`,
-        description: `Important Announcement ${i}`,
-        date: new Date(),
-        classId: classes[i % classes.length].id,
-      },
-    });
-  }
-
-  // MAINTENANCE TICKETS
-  const ticketLocations = ["Lab 3", "Staff Room A", "Block B, Floor 2", "Classroom 8B", "Main Gate"];
-  const ticketStatuses = ["Completed", "Pending"];
-  const ticketItems = ["Projector", "AC Unit", "Water Filter", "Window Latch", "Security Camera"];
-  
-  for (let i = 0; i < 5; i++) {
-    await prisma.maintenanceTicket.create({
-      data: {
-        title: `Fix ${ticketItems[i]}`,
-        location: ticketLocations[i % ticketLocations.length],
-        description: `Routine service check and repair work logged for the school's ${ticketItems[i].toLowerCase()}.`,
-        status: ticketStatuses[i % 2], 
-        createdAt: new Date(new Date().setDate(new Date().getDate() - i)),
-      },
-    });
-  }
-
-  console.log("Seeding completed successfully!");
+  console.log("✅ Seeding completed successfully!");
 }
 
 main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
+  .catch((e) => {
+    console.error("❌ Error while seeding: ", e);
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });

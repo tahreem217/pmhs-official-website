@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod'; // or 'zod/v4'
 import {  toast } from 'react-toastify';
-import InputField from '../InputField';
+import InputField from '../ui/InputField';
 import Image from "next/image"
 import { FieldError } from 'react-hook-form';
 import { subjectSchema,SubjectSchema } from '@/lib/formValidationSchema';

@@ -3,7 +3,7 @@
  import { zodResolver } from '@hookform/resolvers/zod';
  import { string, z } from 'zod'; // or 'zod/v4'
  import {  toast } from 'react-toastify';
- import InputField from '../InputField';
+ import InputField from '../ui/InputField';
  import Image from "next/image"
  import Select from 'react-select';
  import { Controller, FieldError } from 'react-hook-form';
@@ -13,7 +13,15 @@
  import { useFormState } from "react-dom";
  import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
  import { useRouter } from 'next/navigation';
+ const generateAcademicYears = (startYear: number, count: number) => {
+  return Array.from({ length: count }, (_, i) => {
+    const year = startYear + i;
+    return `${year}-${year + 1}`;
+  });
+};
+
  
+const ACADEMIC_YEARS = generateAcademicYears(2023, 14);
  const ExamForm = ({setOpen,type,data,relatedData}: {setOpen:Dispatch<SetStateAction<boolean>>,type:"edit" | "create" ; data?:any,relatedData:any;}
  
  ) => {
@@ -57,8 +65,26 @@
        <div className=' w-full flex flex-wrap gap-6  '> 
  
       <InputField label="title" name="title" defaultValue={data?.title}  register={register} error={errors.title}  />
-      
- 
+      <div className="flex flex-col gap-2 w-full md:w-1/4">
+  <label className="text-xs text-gray-500">Academic Year</label>
+  <select
+    className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+    {...register("academicYear")}
+    defaultValue={data?.academicYear || ""}
+  >
+     <option value="" disabled>Select a year</option>
+    
+     {ACADEMIC_YEARS.map((year) => (
+      <option key={year} value={year}>
+        {year}
+      </option>
+    ))}
+  </select>
+
+   {errors.academicYear?.message && (
+    <p className="text-xs text-red-400">{errors.academicYear.message.toString()}</p>
+  )}
+</div>
 
   
   
@@ -66,21 +92,7 @@
   
    
      
-  <div className='flex flex-col gap-1 flex-1'>
-        <label className='text-sm text-gray-400'  >Day</label>
-     <select  {...register("day")} className='ring-[1.5px] ring-gray-300  px-2 py-2 rounded-md text-sm' defaultValue={data?.day || "demo"}>
-     <option disabled value="demo">Select a day</option>
-        <option value="SUNDAY">Sunday </option>
-       
-        <option value="MONDAY">Monday </option>
-        <option value="TUESDAY">Tuesday </option>
-        <option value="WEDNESDAY">Wednesday </option>
-        <option value="THURSDAY">Thursday </option>
-        <option value="FRIDAY">Friday </option>
-        <option value="SATDAY">Satday </option>
-     </select>
-      {errors.day?.message && <p className='text-sm text-red-500'>{errors.day?.message.toString()}</p>}
-      </div>
+  
  
 <InputField
           label="Start Time"

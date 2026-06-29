@@ -12,6 +12,8 @@ import PreFooter from '@/components/landing/PreFooter';
 import Annoucement from "@/components/notices/AnnoucementBox";
 import RoleRedirect from '@/components/RoleRedirect';
 import Footer from '@/components/landing/Footer';
+import AdminMessage from '@/components/landing/AdministrativeOfiicerMessage';
+import DirectorMessage from '@/components/landing/DirectorMessage';
  
 export default function HomePage() {
 
@@ -37,6 +39,9 @@ export default function HomePage() {
         <Annoucement/>
         </div>
       </div>
+
+      <AdminMessage/>
+      <DirectorMessage/>
       
     
 

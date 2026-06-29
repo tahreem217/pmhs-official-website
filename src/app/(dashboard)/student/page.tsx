@@ -1,9 +1,9 @@
  
 import Usercard from "@/components/Usercard";
-import CountChart from "@/components/CountChart";
  
-import FinanceChart from "@/components/FinanceChart";
-import Calender from "@/components/BigCalenderContainer";
+ 
+ 
+import Calender from "@/components/dashboard/BigCalenderContainer";
  import { auth } from "@clerk/nextjs/server";
  import prisma from "@/lib/prisma";
 import  Annoucements from "@/components/notices/AnnoucementBox";

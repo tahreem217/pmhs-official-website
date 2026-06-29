@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import { FaBell } from "react-icons/fa6"; 
-import DetailsModal from "../DetailsModal";
+import DetailsModal from "./DetailsModal";
 import NoticesForm from "../forms/NoticesForm";
 import FormModal from "../FormModal";
 
