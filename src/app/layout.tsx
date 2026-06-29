@@ -7,11 +7,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "School Management System",
-  description: "A full-stack school management dashboard",
-};
-
+export const metadata = {
+  metadataBase: new URL('https://patnamuslimhighschool.com'),
+  title: "Patna Muslim High School | Official ERP Portal",
+  description: "Official portal for Patna Muslim High School.",
+  alternates: {
+    canonical: '/',
+  },
+}
 export default function RootLayout({
   children,
 }: Readonly<{
