@@ -7,7 +7,7 @@ export default function SimpleCarousel() {
   const [currentIndex,setCurrentIndex]=useState(0);
 
   const slideImages=[
-   "/pmhs-cbse-mainblock.png",
+  //  "/pmhs-cbse-mainblock.png",
     "/pmhs-carousel1.jpeg",
 
     "/pmhs-carousel2.jpeg",

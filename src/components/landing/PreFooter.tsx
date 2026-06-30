@@ -73,7 +73,7 @@ const Footer = () => {
                         School Portal
                     </h3>
                     <p className="text-xs text-slate-400 mb-5 leading-relaxed">
-                        A unified management platform for students, parents, teachers, and administration.
+                        A unified management platform for students , teachers, and administration.
                     </p>
                     <Link 
                         href="/sign-in" 
