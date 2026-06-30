@@ -1,21 +1,19 @@
- "use client"
-import Image from "next/image"
+"use client"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
-import { FaCopy } from "react-icons/fa6";
+import { faLocationDot, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { FaCopy, FaUserGraduate, FaChalkboardUser, FaShieldHalved, FaRightToBracket } from "react-icons/fa6";
 import { useState } from "react";
+import Link from "next/link"; 
 
-const Prefooter = () => {
+const Footer = () => {
     const [copiedItem, setCopiedItem] = useState("");
-    const copyToClipboard=(text:string,itemName:string)=>{
-        if(navigator.clipboard)
-        {
-            navigator.clipboard.writeText(text);
 
-        }
-        else{
-            const  textArea=document.createElement("textarea");
-            textArea.value=text;
+    const copyToClipboard = (text:string, itemName:string) => {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+        } else {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
             document.body.appendChild(textArea);
             textArea.select();
             document.execCommand("copy");
@@ -23,100 +21,121 @@ const Prefooter = () => {
         }
         setCopiedItem(itemName);
         setTimeout(() => setCopiedItem(""), 2000);
-      
     }
-    return(
-        <section className="relative w-full py-16 md:py-24 overflow-hidden flex flex-col  items-center">
+
+    return (
+        <footer className="w-full bg-[#003366] text-slate-200 pt-16 pb-8   font-sans border-t-[6px] border-amber-500">
+            <div className="max-w-7xl mx-auto px-4 grid grid-cols-2   lg:grid-cols-4 gap-10">
+                
             
-            <div className="absolute inset-0 -z-10 ">
-            <Image
-          src="/pmhs-cbse-mainblock.png"
-          alt="School Building Background"
-          fill
-          className="object-cover object-bottom"  
-        />
-     {/* When you combine inset-0 with absolute positioning, it tells the element to stretch out and grab all four corners of its parent container, completely filling the space */}
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/25 to-white"></div>
+                <div className="space-y-4">
+                    <div>
+                        <h2 className="font-extrabold text-2xl text-white uppercase tracking-wide mb-2">
+                            PMHS
+                        </h2>
+                        <div className="h-1 w-12 bg-amber-400 rounded-full"></div>
+                    </div>
+                    
+                    <p className="text-sm leading-relaxed text-slate-300 font-medium pr-4">
+                        Patna Muslim High School. 
+                        <br/><br/>
+                        Blending traditional values with modern educational excellence since 1938. Shaping the leaders of tomorrow.
+                    </p>
+                </div>
 
-            </div>
-            <div className="bg-[#42426F] text-white w-[90%] md:w-1/2  p-8 rounded-2xl text-center mb-16  ">
-        <h3 className="text-xl md:text-2xl font-bold mb-4 tracking-wider flex justify-center items-center gap-3 text-amber-400">
-          THOUGHT FOR THE DAY <FontAwesomeIcon icon={faLightbulb} />
-        </h3>
-        <p className="text-lg md:text-xl font-medium italic text-gray-100">
-          "Education is the key to unlocking the world, a passport to freedom."
-        </p>
+                {/* Column 2: Explore */}
+                <div>
+                    <h3 className="text-lg font-bold text-white uppercase tracking-wider mb-4">
+                        Explore
+                    </h3>
+                    <ul className="space-y-3 text-sm font-medium text-slate-300">
+                        <li>
+                            <Link href="/" className="hover:text-amber-400 hover:pl-1 transition-all">Home</Link>
+                        </li>
+                        <li>
+                            <Link href="/admissions" className="hover:text-amber-400 hover:pl-1 transition-all">Admissions (2025-2026)</Link>
+                        </li>
+                        <li>
+                            <Link href="about/rules" className="hover:text-amber-400 hover:pl-1 transition-all">Rules & Regulations</Link>
+                        </li>
+                        <li>
+                            <Link href="/about" className="hover:text-amber-400 hover:pl-1 transition-all">Our History</Link>
+                        </li>
+                        <li>
+                            <Link href="/facilities" className="hover:text-amber-400 hover:pl-1 transition-all">Campus Facilities</Link>
+                        </li>
+                    </ul>
+                </div>
 
-
-      </div>
-
-      <div className="w-full max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
  
-        <div className="lg:col-span-2 bg-black/30  border border-white/20 text-white p-8 rounded-2xl shadow-xl">
-          <h2 className="font-bold text-3xl text-amber-400 mb-2">
-            Patna Muslim High School
-          </h2>
-          <p className="text-gray-200 font-medium mb-6">
-            Opp to Science College, Patna, Bihar 800004
-          </p>
-          <p className="text-gray-100 leading-relaxed text-justify text-lg">
-            Patna Muslim High School (PMHS) is a significant educational institution in Patna, Bihar, known for catering to the Muslim community's need for modern education, aiming to blend religious and modern learning. It offers CBSE education up to +2 level, focusing on empowering students with English and science skills, reflecting the broader movement for Muslim educational upliftment in India inspired by figures like Sir Syed Ahmed Khan, who sought to modernize Muslim education.
-          </p>
-        </div>
+                <div>
+                    <h3 className="text-lg font-bold text-white uppercase tracking-wider mb-4">
+                        School Portal
+                    </h3>
+                    <p className="text-xs text-slate-400 mb-5 leading-relaxed">
+                        A unified management platform for students, parents, teachers, and administration.
+                    </p>
+                    <Link 
+                        href="/sign-in" 
+                        className="inline-flex items-center gap-3 bg-amber-500 hover:bg-amber-400 text-[#003366] font-bold py-2.5 px-5 rounded-lg transition-all shadow-md hover:shadow-lg"
+                    >
+                        <FaRightToBracket className="text-lg" />
+                        Login to Portal
+                    </Link>
+                </div>
+ 
+                <div>
+                    <h3 className="text-lg font-bold text-white uppercase tracking-wider mb-4">
+                        Contact Us
+                    </h3>
+                    <ul className="space-y-5 text-sm">
+           
+                        <li className="flex items-start gap-3">
+                            <FontAwesomeIcon icon={faLocationDot} className="text-amber-400 mt-1 shrink-0" />
+                            <span className="text-slate-300">Opposite Science College, <br/>Patna, Bihar 800004</span>
+                        </li>
 
-     
-        <div className="lg:col-span-1 bg-black/30   border border-white/20 text-white p-8 rounded-2xl shadow-xl flex flex-col justify-between">
-          
-          <div className="space-y-6">
-        
-            <div>
-              <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider mb-2">Email Us</h3>
-              <div 
-                onClick={() => copyToClipboard("patnamuslimhighschool@gmail.com", "email")}
-                className="group flex items-center justify-between   hover:bg-white/30 p-3 rounded-lg cursor-pointer transition-colors border border-white/10"
-              >
-                <span className="text-sm md:text-base  text-blue-200 break-all">patnamuslimhighschool@gmail.com</span>
-                {copiedItem === "email" ? (
-                  <span className="text-green-300 text-sm font-bold ml-2">Copied!</span>
-                ) : (
-                  <FaCopy className="text-gray-200 group-hover:text-amber-400 transition-colors shrink-0 ml-2" />
-                )}
-              </div>
+             
+                        <li className="flex items-start gap-3 group">
+                            <FontAwesomeIcon icon={faEnvelope} className="text-amber-400 mt-1 shrink-0" />
+                            <div className="flex flex-col">
+                                <span className="text-slate-400 text-[11px] uppercase tracking-wider mb-0.5">Official Email</span>
+                                <div className="flex items-center gap-2">
+                                    <a href="mailto:patnamuslimhighschool@gmail.com" className="hover:text-white transition-colors break-all">
+                                        patnamuslimhighschool@gmail.com
+                                    </a>
+                                    <button onClick={() => copyToClipboard("patnamuslimhighschool@gmail.com", "email")} className="text-slate-400 hover:text-amber-400 transition-colors">
+                                        {copiedItem === "email" ? <span className="text-emerald-400 text-[10px] uppercase font-bold">Copied!</span> : <FaCopy />}
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+
+ 
+                        <li className="flex items-start gap-3 group">
+                            <FontAwesomeIcon icon={faPhone} className="text-amber-400 mt-1 shrink-0" />
+                            <div className="flex flex-col">
+                                <span className="text-slate-400 text-[11px] uppercase tracking-wider mb-0.5">Administration Desk</span>
+                                <div className="flex items-center gap-2">
+                                    <a href="tel:+917781090858" className="hover:text-white transition-colors font-semibold tracking-wider">
+                                        +91 77810 90858
+                                    </a>
+                                    <button onClick={() => copyToClipboard("+917781090858", "phone")} className="text-slate-400 hover:text-amber-400 transition-colors">
+                                        {copiedItem === "phone" ? <span className="text-emerald-400 text-[10px] uppercase font-bold">Copied!</span> : <FaCopy />}
+                                    </button>
+                                </div>
+                                <span className="text-xs text-slate-500 mt-1">Shahnawaz Ahmad (Accountant)</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
-
-     
-            <div>
-              <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider mb-2">Call Us</h3>
-              <div 
-                onClick={() => copyToClipboard("+917781090858", "phone")}
-                className="group flex items-center justify-between   hover:bg-white/30 p-3 rounded-lg cursor-pointer transition-colors border border-white/10"
-              >
-                <span className="text-base text-blue-200 tracking-widest">+91 77810 90858</span>
-                {copiedItem === "phone" ? (
-                  <span className="text-green-300 text-sm font-bold ml-2">Copied!</span>
-                ) : (
-                  <FaCopy className="text-gray-200 group-hover:text-amber-400 transition-colors shrink-0 ml-2" />
-                )}
-              </div>
-              <p className="text-xs text-gray-300 mt-2 font-medium">
-                Shahnawaz Ahmad (Clerk Cum Accountant)
-              </p>
-            </div>
-          </div>
-
-          <a 
-            href="mailto:patnamuslimhighschool@gmail.com"
-            className="mt-8 block w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-center py-3 px-6 rounded-xl transition-transform hover:-translate-y-1 shadow-lg"
-          >
-            Mail Us Directly
-          </a>
-
-        </div>
-        </div>
-        </section>
-      ) 
-
-   
+ 
+            
+      
+        </footer>
+    );
 }
-export default Prefooter;
+
+export default Footer;

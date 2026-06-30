@@ -24,7 +24,7 @@ const PublicHeader = () => {
 
     return (
         <header className="w-full bg-[#003366] text-[#003366] shadow-md sticky top-0 z-50">
-            <div className="flex flex-col md:flex-row items-center lg:w-[80%]  text-white justify-between md:justify-center gap-4 px-4 md:py-10 py-4 max-w-7xl mx-auto rounded-b-md">
+            <div className="flex  flex-row items-center lg:w-[80%]  text-white  justify-center gap-4 px-4 md:py-10 py-4 max-w-7xl mx-auto rounded-b-md">
                 
                 <Image 
                     src="/logo.png" 
@@ -35,14 +35,14 @@ const PublicHeader = () => {
                 />
                 
                
-                <div className="flex lg:flex-row lg:gap-6  flex-col justify-center items-center text-center">
+                <div className="flex   lg:gap-6   justify-center items-center text-center">
                     <h2 className="font-bold text-xl md:text-2xl  lg:text-3xl tracking-wide">
                         PATNA MUSLIM HIGH SCHOOL
                     </h2>
-                    <h2 className="text-lg md:text-2xl lg:text-3xl  font-medium" dir="rtl">
+                    <h2 className="text-lg hidden md:block md:text-2xl lg:text-3xl  font-medium" dir="rtl">
                         پٹنہ مسلم ہائی اسکول
                     </h2>
-                    <h2 className="text-lg md:text-2xl lg:text-3xl  font-medium">
+                    <h2 className="text-lg hidden md:block md:text-2xl lg:text-3xl  font-medium">
                         पटना मुस्लिम हाई स्कूल
                     </h2>
                 </div>

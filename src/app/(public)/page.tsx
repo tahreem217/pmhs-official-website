@@ -7,13 +7,12 @@ import PublicHeader from '@/components/landing/PublicHeader';
 import ImageCarousel from '@/components/landing/Carousel';
 import MissionVision from '@/components/landing/VisionMission';
 import ImportantLinks from '@/components/landing/ImportantLinks';
-import PrincipalMessage from '@/components/landing/PrincipalMessage';
-import PreFooter from '@/components/landing/PreFooter';
+ import PreFooter from '@/components/landing/PreFooter';
 import Annoucement from "@/components/notices/AnnoucementBox";
 import RoleRedirect from '@/components/RoleRedirect';
 import Footer from '@/components/landing/Footer';
-import AdminMessage from '@/components/landing/AdministrativeOfiicerMessage';
-import DirectorMessage from '@/components/landing/DirectorMessage';
+ import AllMessages from '@/components/landing/AllMessages';
+import ThoughtOfTheDay from '@/components/landing/ThoughtForTheday';
  
 export default function HomePage() {
 
@@ -30,7 +29,7 @@ export default function HomePage() {
         <ImageCarousel/>
           <MissionVision/>
       </div>
-      <PrincipalMessage/>
+      <AllMessages/>
       <div className=' w-screen flex flex-col md:flex-row gap-12 md:gap-6 md:px-10  px-4 py-10'>
         <div className='md:w-[50%] w-full ' >
         <ImportantLinks/>
@@ -40,11 +39,10 @@ export default function HomePage() {
         </div>
       </div>
 
-      <AdminMessage/>
-      <DirectorMessage/>
+     
       
     
-
+<ThoughtOfTheDay/>
      
       <PreFooter/>
  

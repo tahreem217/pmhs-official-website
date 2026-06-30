@@ -61,8 +61,7 @@ const AnnouncementScroll = ({ announcements = [], role, relatedData }: Announcem
       
        <div className="px-6 py-4 bg-amber-100/20 flex justify-between items-center z-10 shadow-sm shrink-0">
         <div className="flex items-center gap-3">
-          <FaBell className="text-amber-400 text-4xl animate-bounce" />
-          <h1 className="text-xl font-bold tracking-wide">Notice Board</h1>
+           <h1 className="text-xl font-bold tracking-wide">Notices</h1>
         </div>
         {role === "admin" && (
              

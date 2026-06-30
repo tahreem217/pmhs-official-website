@@ -30,6 +30,21 @@ const facilitiesData = [
         description: "State-of-the-art equipment for mechanics, optics, and electronics experiments to bring physical theories to life."
       },
       {
+        title: "Biology Laboratory",
+        image: "/pmhs-biolab.jpeg",
+        description: "An interactive space featuring modern microscopes and biological specimens, allowing students to explore the intricacies of life sciences."
+      },
+      {
+        title: "School Library",
+        image: "/pmhs-library.jpeg",
+        description: "A vast collection of academic texts, journals, and literature providing a quiet, focused atmosphere for reading and research."
+      },
+      {
+        title: "Prayer Hall",
+        image: "/pmhs-prayer-hall.jpeg",
+        description: "A serene and spacious hall dedicated to daily prayers, fostering spiritual growth and providing a peaceful retreat for reflection."
+      },
+      {
         title: "NCC Training",
         image: "/pmhs-ncc.jpeg",
         description: "Instilling discipline, leadership, and patriotism through our active National Cadet Corps (NCC) division."
