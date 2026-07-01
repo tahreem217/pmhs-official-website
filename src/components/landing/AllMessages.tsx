@@ -50,7 +50,7 @@ const sampleMessages: AdminMessage[] = [
       {
         id: "admin-1",
         name: "Honourable Izhar Yusuf",
-        title: "Administration Officer",
+        title: "Administrative Officer",
         organization: "Patna Muslim High School",
         image: "/izhar_yusuf.png",
         date: "March 2026",
