@@ -14,6 +14,7 @@ import Footer from '@/components/landing/Footer';
  import AllMessages from '@/components/landing/AllMessages';
 import ThoughtOfTheDay from '@/components/landing/ThoughtForTheday';
 import AboutSchool from '@/components/landing/AboutSchool';
+import SchoolFacilities from '@/components/landing/SchoolFacilities';
  
 export default function HomePage() {
 
@@ -28,14 +29,16 @@ export default function HomePage() {
       <SchoolBanner />
       <AboutSchool/>
       <div className='w-[80%] h-[5
-      00px]'>
+'>
          <ImageCarousel/>
          </div>
-         <div className='w-screen min-h-[700px]'>
+         <div className='w-screen '>
           <MissionVision/>
           </div>
       
       <AllMessages/>
+
+      <SchoolFacilities/>
       <div className=' w-screen flex flex-col md:flex-row gap-12 md:gap-6 md:px-10  px-4 py-10'>
         <div className='md:w-[50%] w-full ' >
         <ImportantLinks/>
