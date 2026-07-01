@@ -9,11 +9,12 @@ export default function SimpleCarousel() {
   const slideImages=[
   //  "/pmhs-cbse-mainblock.png",
     "/pmhs-carousel1.jpeg",
-
     "/pmhs-carousel2.jpeg",
-    // "/pmhs-carousel3.jpeg",
+     "/pmhs-carousel3.jpeg",
     "/pmhs-carousel4.jpeg",
-    // "/pmhs-carousel5.jpeg",
+    "/pmhs-carousel5.jpeg",
+    "/pmhs-carousel6.jpeg",
+    "/pmhs-carousel7.jpeg",
     "/pmhs-ncc.jpeg",
  
     
