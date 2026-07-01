@@ -59,7 +59,7 @@ const Admission = () => {
                 <h3 className="text-lg font-bold text-[#003366] uppercase tracking-wide">Syllabus & Eligibility (+2)</h3>
                 <div className="h-0.5 w-16 bg-amber-400 my-1.5 rounded-full"></div>
                 <p className="text-slate-600 font-medium text-sm mt-2">
-                  We follow the Bihar Board syllabus in all streams (English/Hindi medium). A minimum of <span className="text-red-600 font-bold">45% marks</span> in 10th standard board examinations is strictly required for admission.
+                  We follow the Bihar Board syllabus in all streams (English/Hindi medium). A minimum of <span className="text-red-600 font-bold">60% marks</span> in 10th standard board examinations is strictly required for admission.
                 </p>
               </div>
             </div>

@@ -7,7 +7,7 @@ const facilitiesData = [
     {
       title: "Sports & Athletics",
       image: "/pmhs-sports.jpeg",
-      description: "Celebrating our state-level badminton champions and fostering physical fitness through dedicated sports programs and coaching."
+      description: "Celebrating our state-level ncc champions and fostering physical fitness through dedicated sports programs and coaching."
     },
     {
         title: "Classrooms",

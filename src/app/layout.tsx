@@ -1,6 +1,8 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import './globals.css';
+import { ToastContainer } from 'react-toastify'; // 1. Import ToastContainer
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
 metadataBase: new URL('https://www.patnamuslimhighschool.com'),
@@ -50,7 +52,21 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body>{children}</body>
+        <body>{children}
+        <ToastContainer 
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
+          
+        </body>
       </html>
     </ClerkProvider>
   );
