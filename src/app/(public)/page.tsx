@@ -27,10 +27,11 @@ export default function HomePage() {
  
       <SchoolBanner />
       <AboutSchool/>
-      <div className='w-[80%] h-[500px]'>
+      <div className='w-[80%] h-[5
+      00px]'>
          <ImageCarousel/>
          </div>
-         <div className='w-[80%] min-h-[700px]'>
+         <div className='w-screen min-h-[700px]'>
           <MissionVision/>
           </div>
       
