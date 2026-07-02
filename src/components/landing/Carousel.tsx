@@ -10,7 +10,7 @@ export default function SimpleCarousel() {
   //  "/pmhs-cbse-mainblock.png",
     "/pmhs-carousel1.jpeg",
     "/pmhs-carousel2.jpeg",
-    "/pmhs-carousel3.jpeg",
+   // "/pmhs-carousel3.jpeg",
     "/pmhs-carousel4.jpeg",
     "/pmhs-carousel5.jpeg",
     "/pmhs-carousel6.jpeg",
